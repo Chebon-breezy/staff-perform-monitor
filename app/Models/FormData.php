@@ -21,5 +21,10 @@ class FormData extends Model
         'yyyy',
         'location',
         'task',
+        'ip',
+        'country',
+        'city',
+        'latitude',
+        'longitude',
     ];
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FormData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Stevebauman\Location\Facades\Location;
 
 class FormController extends Controller
 {
@@ -19,8 +20,19 @@ class FormController extends Controller
         // Validate the incoming request data
         $this->validator($request->all())->validate();
 
+        //stevebauman location service
+
+        // $userIp = $request->ip();
+        // $userIp = $_SERVER['REMOTE_ADDR'];
+
+        //it will not work on localhost but on live server when app is hosted
+        $userIp = '66:102:0:0';
+        $position = Location::get($userIp);
+        // return $position;
+
+
         // Create a new form data entry
-        $this->create($request->all());
+        $this->create($request->all(), $position);
 
         // Redirect to the home route with a success message
         return redirect()->route('home')->with('status', 'Form submitted successfully!');
@@ -53,9 +65,10 @@ class FormController extends Controller
      * Create a new form data entry after a valid submission.
      *
      * @param  array  $data
+     * @param  $position
      * @return \App\Models\FormData
      */
-    protected function create(array $data)
+    protected function create(array $data, $position)
     {
         return FormData::create([
             'fname' => $data['fname'],
@@ -69,6 +82,11 @@ class FormController extends Controller
             'yyyy' => $data['yyyy'],
             'location' => $data['location'],
             'task' => $data['task'],
+            'ip' => $position->ip,
+            'country' => $position->countryName,
+            'city' => $position->cityName,
+            'latitude' => $position->latitude,
+            'longitude' => $position->longitude,
         ]);
     }
 }

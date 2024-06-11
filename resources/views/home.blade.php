@@ -118,6 +118,13 @@
                 @enderror
             </div>
 
+            <!-- Hidden fields for location data -->
+            <input type="hidden" name="ip" id="ip">
+            <input type="hidden" name="country" id="country">
+            <input type="hidden" name="city" id="city">
+            <input type="hidden" name="latitude" id="latitude">
+            <input type="hidden" name="longitude" id="longitude">
+
             <div class="col-md-6 offset-md-4 mt-4">
                 <button type="submit" class="btn btn-primary">
                     {{ __('Submit') }}
@@ -131,4 +138,19 @@
         @endif
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch(`http://api.ipstack.com/check?access_key={{ $ipstackKey }}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ip').value = data.ip;
+                document.getElementById('country').value = data.country_name;
+                document.getElementById('city').value = data.city;
+                document.getElementById('latitude').value = data.latitude;
+                document.getElementById('longitude').value = data.longitude;
+            })
+            .catch(error => console.error('Error:', error));
+    });
+</script>
 @endsection

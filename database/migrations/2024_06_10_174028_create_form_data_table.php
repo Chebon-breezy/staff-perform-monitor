@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('fname');
             $table->string('lname');
-            $table->string('id');
             $table->string('address');
             $table->string('email');
             $table->string('phone');
@@ -24,6 +23,11 @@ return new class extends Migration
             $table->integer('yyyy');
             $table->string('location');
             $table->text('task');
+            $table->string('ip')->nullable();
+            $table->string('country')->nullable();
+            $table->string('city')->nullable();
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
             $table->timestamps();
         });
     }
